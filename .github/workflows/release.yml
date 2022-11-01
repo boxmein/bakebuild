@@ -1,0 +1,40 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Compile and attach
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo build --release
+      - uses: actions/upload-artifact@v2
+        with:
+          path: target/release/bake
+          key: bake
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Has cargo.toml changed?
+      id: cargotoml
+      uses: tj-actions/changed-files@v34
+      with:
+        files: |
+          Cargo.toml
+    - name: Get artifact
+      uses: actions/download-artifact@v2
+      with:
+        key: bake
+      if: steps.cargotoml.outputs.any_changed == 'true'
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: steps.cargotoml.outputs.any_changed == 'true'
+      with:
+        files: bake
