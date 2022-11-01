@@ -5,6 +5,8 @@ Probably the smallest build tool that still involves a dep-graph
 ## Usage
 
 - [Install it](#installing)
+- Run `bake` in a folder with a `./bakefile.yml` inside
+- Magic
 
 ## Examples
 
@@ -128,3 +130,4 @@ sudo install \
 - Start small
 - Maybe solve an issue for someone
 - Have fun with coding
+- Parallelization
